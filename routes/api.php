@@ -1,6 +1,8 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\ClassroomController;
+use App\Http\Controllers\LectureController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::resource('/students', StudentController::class)->except(['create', 'edit']);
+Route::resource('/classrooms', ClassroomController::class)->except(['create', 'edit']);
+Route::resource('/lectures', LectureController::class)->except(['create', 'edit']);
+Route::get('/classrooms/get-lectures/{classroom}', [ClassroomController::class, 'getLectures'])->name('getLectures');
+Route::middleware('normalizer')->post('/classrooms/update-lectures/{classroom}', [ClassroomController::class, 'updateLectures'])->name('updateLectures');
